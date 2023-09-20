@@ -1,0 +1,23 @@
+{
+  "extends": ["airbnb", "prettier", "plugin:node/recommended", "eslint:recommended"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": [
+      "off",
+      {
+        "singleQuote": true,
+        "tabWidth": 4,
+        "parser": "flow",
+        "endOfLine": "auto"
+      }
+    ],
+    "no-console": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "req | res | next | val" }],
+    "no-return-await": "off",
+    "consistent-return": "off",
+    "spaced-comment": "warn",
+    "no-restricted-syntax": "off",
+    "semi": "warn"
+  }
+}
