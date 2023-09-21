@@ -37,29 +37,28 @@ async function getCommitCount(url) {
 
 exports.totalCommits = async () => {
   const repos = (await github.get('/user/repos')).data;
-  // console.log(repos.length);
   const commitCounts = await Promise.all(
     repos.map((repo) => getCommitCount(repo.commits_url.replace('{/sha}', ''))),
   );
-  // console.log(commitCounts);
+
   return commitCounts.reduce((acc, current) => acc + current, 0);
 };
 
-exports.getLanguages = async () => {
+exports.languages = async () => {
   const repos = (await github.get('/user/repos')).data;
   const langs = new Set();
   repos.forEach((repo) => {
-    langs.add(repo.language);
-  });
-  langs.forEach((lang) => {
-    if (!lang) langs.delete(lang);
+    if (repo.language) langs.add(repo.language);
   });
   return [...langs];
 };
 
 function Achievement(achievement, imgUrl, tierText) {
+  //! too many arguments. spread maybe
+  const tierN = tierText.replace('x', '') * 1;
+
   function getTier() {
-    switch (tierText.replace('x', '') * 1) {
+    switch (tierN) {
       case 2:
         return 'Bronze';
       case 3:
@@ -72,7 +71,7 @@ function Achievement(achievement, imgUrl, tierText) {
   }
 
   function getColor() {
-    switch (tierText.replace('x', '') * 1) {
+    switch (tierN) {
       case 2:
         return '#F9BFA7';
       case 3:
@@ -101,7 +100,7 @@ exports.achievements = async () => {
   $('details.js-achievement-card-details').each((i, el) => {
     achievements.push(
       new Achievement(
-        $(el).find('img').attr('alt').replace('Achievement: ', '').trim(),
+        $(el).find('img').attr('alt').split(':')[1].trim(),
         $(el).find('img').attr('src'),
         $(el).find('span').text(),
       ),

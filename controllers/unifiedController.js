@@ -17,7 +17,7 @@ exports.commitsCount = async (req, res) => {
 };
 
 exports.languages = async (req, res) => {
-  const langs = await gh.getLanguages();
+  const langs = await gh.languages();
   res.status(200).json({
     message: 'ok',
     languages: langs,

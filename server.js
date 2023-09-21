@@ -13,6 +13,7 @@ process.on('uncaughtException', (e) => {
 });
 
 process.on('unhandledRejection', (ex) => {
+  // ? Important should I exit the process!
   console.log('Unhandled Rejection', ex.message);
 });
 
