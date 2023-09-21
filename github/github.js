@@ -1,3 +1,4 @@
+const cheerio = require('cheerio');
 const axios = require('axios').default;
 
 const github = axios.create({
@@ -7,6 +8,18 @@ const github = axios.create({
     Accept: 'application/vnd.github+json',
   },
 });
+
+const user = {};
+
+exports.init = async () => {
+  const _user = (await github.get('/user')).data;
+
+  user.name = _user.name;
+  user.username = _user.login;
+  user.avatar_url = _user.avatar_url;
+  user.html_url = _user.html_url;
+  user.url = _user.url;
+};
 
 exports.totalRepos = async () => {
   const response = github.get('/user/repos');
@@ -42,4 +55,20 @@ exports.getLanguages = async () => {
     if (!lang) langs.delete(lang);
   });
   return [...langs];
+};
+
+exports.achievements = async () => {
+  const html = (await github.get(`https://github.com/${user.username}?tab=achievements`)).data;
+
+  const achievements = [];
+  const $ = cheerio.load(html);
+  $('details.js-achievement-card-details').each((i, el) => {
+    achievements.push({
+      achievement: $(el).find('img').attr('alt').replace('Achievement: ', '').trim(),
+      img_url: $(el).find('img').attr('src'),
+      count: $(el).find('span').text().replace('x', '') * 1 || 1,
+    });
+  });
+  // console.log(achievements);
+  return achievements;
 };
