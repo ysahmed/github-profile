@@ -28,6 +28,6 @@ exports.achievements = async (req, res) => {
   const achievements = await gh.achievements();
   res.status(200).json({
     message: 'ok',
-    languages: achievements,
+    achievements,
   });
 };
