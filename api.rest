@@ -5,9 +5,11 @@ http://localhost:3000/api/v1/repos
 ### // commits
 http://localhost:3000/api/v1/commits
 
-
 ### // languages
 http://localhost:3000/api/v1/languages
 
 ### // achievements
 http://localhost:3000/api/v1/achievements
+
+### // invalid route
+http://localhost:3000/api/v1/something

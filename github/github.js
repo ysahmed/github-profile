@@ -57,18 +57,55 @@ exports.getLanguages = async () => {
   return [...langs];
 };
 
-exports.achievements = async () => {
-  const html = (await github.get(`https://github.com/${user.username}?tab=achievements`)).data;
+function Achievement(achievement, imgUrl, tierText) {
+  function getTier() {
+    switch (tierText.replace('x', '') * 1) {
+      case 2:
+        return 'Bronze';
+      case 3:
+        return 'Silver';
+      case 4:
+        return 'Gold';
+      default:
+        return 'Default';
+    }
+  }
 
+  function getColor() {
+    switch (tierText.replace('x', '') * 1) {
+      case 2:
+        return '#F9BFA7';
+      case 3:
+        return '#E1E4E4';
+      case 4:
+        return 'FAE57E';
+      default:
+        return null;
+    }
+  }
+
+  this.achievement = achievement;
+  this.img_url = imgUrl;
+  this.tier_text = tierText;
+  this.tier = getTier();
+  this.color = getColor();
+}
+
+exports.achievements = async () => {
+  const username = (await github.get('/user')).data.login;
+  const res = await github.get(`https://github.com/${username}?tab=achievements`);
+
+  const html = res.data;
   const achievements = [];
   const $ = cheerio.load(html);
   $('details.js-achievement-card-details').each((i, el) => {
-    achievements.push({
-      achievement: $(el).find('img').attr('alt').replace('Achievement: ', '').trim(),
-      img_url: $(el).find('img').attr('src'),
-      count: $(el).find('span').text().replace('x', '') * 1 || 1,
-    });
+    achievements.push(
+      new Achievement(
+        $(el).find('img').attr('alt').replace('Achievement: ', '').trim(),
+        $(el).find('img').attr('src'),
+        $(el).find('span').text(),
+      ),
+    );
   });
-  // console.log(achievements);
   return achievements;
 };

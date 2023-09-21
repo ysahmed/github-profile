@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const controller = require('../controllers/unifiedController');
+require('express-async-errors');
 
 router.route('/repos').get(controller.reposCount);
 router.route('/commits').get(controller.commitsCount);
