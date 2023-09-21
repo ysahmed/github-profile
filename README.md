@@ -44,6 +44,7 @@ Response:
 ```
 
 Get all github achievements (badges)
+
 `GET /api/v1/achievements`
 
 Response:
