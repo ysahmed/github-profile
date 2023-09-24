@@ -9,16 +9,26 @@ const github = axios.create({
   },
 });
 
-const user = {};
+// const user = {};
 
-exports.init = async () => {
+// exports.init = async () => {
+//   const _user = (await github.get('/user')).data;
+
+//   user.name = _user.name;
+//   user.username = _user.login;
+//   user.avatar_url = _user.avatar_url;
+//   user.html_url = _user.html_url;
+//   user.url = _user.url;
+// };
+
+exports.basicInfo = async () => {
   const _user = (await github.get('/user')).data;
-
-  user.name = _user.name;
-  user.username = _user.login;
-  user.avatar_url = _user.avatar_url;
-  user.html_url = _user.html_url;
-  user.url = _user.url;
+  return {
+    name: _user.name,
+    username: _user.login,
+    avatar_url: _user.avatar_url,
+    html_url: _user.html_url,
+  };
 };
 
 exports.totalRepos = async () => {

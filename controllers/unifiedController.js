@@ -1,5 +1,13 @@
 const gh = require('../github/github');
 
+exports.basicInfo = async (req, res) => {
+  const info = await gh.basicInfo();
+  res.status(200).json({
+    message: 'ok',
+    info,
+  });
+};
+
 exports.reposCount = async (req, res) => {
   const count = await gh.totalRepos();
   res.status(200).json({

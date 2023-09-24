@@ -1,15 +1,19 @@
 
-### //total repos
+### total repos
+http://localhost:3000/api/v1/user
+
+### total repos
 http://localhost:3000/api/v1/repos
 
-### // commits
+### 
+// commits
 http://localhost:3000/api/v1/commits
 
-### // languages
+### languages
 http://localhost:3000/api/v1/languages
 
-### // achievements
+### achievements
 http://localhost:3000/api/v1/achievements
 
-### // invalid route
+### invalid route
 http://localhost:3000/api/v1/something
