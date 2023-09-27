@@ -4,7 +4,25 @@ Web API for showing the number of github repos, total number of commits, all the
 
 ## Examples
 
-Get total repositories.
+User Info:
+
+`http://localhost:3000/api/v1/user`
+
+Response:
+
+```json
+{
+  "message": "ok",
+  "info": {
+    "name": "S. M. Waesh Ahmed",
+    "username": "ysahmed",
+    "avatar_url": "https://avatars.githubusercontent.com/u/31134625?v=4",
+    "html_url": "https://github.com/ysahmed"
+  }
+}
+```
+
+Get total repositories:
 
 `GET /api/v1/repos`
 
