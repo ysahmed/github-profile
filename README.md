@@ -1,12 +1,12 @@
 # About
 
-Web API for showing the number of github repos, total number of commits, all the languages used by the user and user's achievements (github badges).
+Web API for retrieving Github user info, number of github repos, total number of commits, all the languages used by the user and user's achievements (github badges).
 
 ## Examples
 
 User Info:
 
-`http://localhost:3000/api/v1/user`
+`GET /api/v1/user`
 
 Response:
 

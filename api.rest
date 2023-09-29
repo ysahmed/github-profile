@@ -1,19 +1,19 @@
 
 ### User Info
-http://localhost:3000/api/v1/user
+GET http://localhost:3000/api/v1/user
 
 ### total repos
-http://localhost:3000/api/v1/repos
+GET http://localhost:3000/api/v1/repos
 
 ### 
 // commits
-http://localhost:3000/api/v1/commits
+GET http://localhost:3000/api/v1/commits
 
 ### languages
-http://localhost:3000/api/v1/languages
+GET http://localhost:3000/api/v1/languages
 
 ### achievements
-http://localhost:3000/api/v1/achievements
+GET http://localhost:3000/api/v1/achievements
 
 ### invalid route
-http://localhost:3000/api/v1/something
+GET http://localhost:3000/api/v1/something

@@ -2,13 +2,8 @@ const { parentPort } = require('worker_threads');
 const { github } = require('../github/github');
 
 async function getCommitCount(url) {
-  try {
-    const response = await github.get(url);
-    return response.data.length;
-  } catch (error) {
-    console.error('Error fetching commit count:', error);
-    return 0;
-  }
+  const response = await github.get(url);
+  return response.data.length;
 }
 
 (async () => {
