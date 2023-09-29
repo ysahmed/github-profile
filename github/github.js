@@ -1,5 +1,5 @@
-const cheerio = require('cheerio');
 const axios = require('axios').default;
+const { Worker, isMainThread } = require('worker_threads');
 
 const github = axios.create({
   baseURL: 'https://api.github.com',
@@ -63,58 +63,84 @@ exports.languages = async () => {
   return [...langs];
 };
 
-function Achievement(achievement, imgUrl, tierText) {
-  //! too many arguments. spread maybe
-  const tierN = tierText.replace('x', '') * 1;
+// class Achievement {
+//   constructor(achievement, imgUrl, tierText) {
+//     //! too many arguments. spread maybe
+//     const tierN = tierText.replace('x', '') * 1;
 
-  function getTier() {
-    switch (tierN) {
-      case 2:
-        return 'Bronze';
-      case 3:
-        return 'Silver';
-      case 4:
-        return 'Gold';
-      default:
-        return 'Default';
-    }
-  }
+//     function getTier() {
+//       switch (tierN) {
+//         case 2:
+//           return 'Bronze';
+//         case 3:
+//           return 'Silver';
+//         case 4:
+//           return 'Gold';
+//         default:
+//           return 'Default';
+//       }
+//     }
 
-  function getColor() {
-    switch (tierN) {
-      case 2:
-        return '#F9BFA7';
-      case 3:
-        return '#E1E4E4';
-      case 4:
-        return 'FAE57E';
-      default:
-        return null;
-    }
-  }
+//     function getColor() {
+//       switch (tierN) {
+//         case 2:
+//           return '#F9BFA7';
+//         case 3:
+//           return '#E1E4E4';
+//         case 4:
+//           return 'FAE57E';
+//         default:
+//           return null;
+//       }
+//     }
 
-  this.achievement = achievement;
-  this.img_url = imgUrl;
-  this.tier_text = tierText;
-  this.tier = getTier();
-  this.color = getColor();
-}
+//     this.achievement = achievement;
+//     this.img_url = imgUrl;
+//     this.tier_text = tierText;
+//     this.tier = getTier();
+//     this.color = getColor();
+//   }
+// }
+
+// exports.achievements = async () => {
+//   const username = (await github.get('/user')).data.login;
+//   const res = await github.get(`https://github.com/${username}?tab=achievements`);
+
+//   const html = res.data;
+//   const achievements = [];
+//   const $ = cheerio.load(html);
+//   $('details.js-achievement-card-details').each((i, el) => {
+//     achievements.push(
+//       new Achievement(
+//         $(el).find('img').attr('alt').split(':')[1].trim(),
+//         $(el).find('img').attr('src'),
+//         $(el).find('span').text(),
+//       ),
+//     );
+//   });
+//   return achievements;
+// };
 
 exports.achievements = async () => {
   const username = (await github.get('/user')).data.login;
   const res = await github.get(`https://github.com/${username}?tab=achievements`);
 
   const html = res.data;
-  const achievements = [];
-  const $ = cheerio.load(html);
-  $('details.js-achievement-card-details').each((i, el) => {
-    achievements.push(
-      new Achievement(
-        $(el).find('img').attr('alt').split(':')[1].trim(),
-        $(el).find('img').attr('src'),
-        $(el).find('span').text(),
-      ),
-    );
-  });
-  return achievements;
+
+  if (isMainThread) {
+    // In the main thread, create a worker to process the HTML
+    return new Promise((resolve, reject) => {
+      const worker = new Worker(`${__dirname}/../workers/achievementScraper`, { workerData: html });
+
+      worker.on('message', (achievements) => {
+        resolve(achievements);
+      });
+
+      worker.on('error', (err) => {
+        reject(err);
+      });
+
+      worker.postMessage(html);
+    });
+  }
 };

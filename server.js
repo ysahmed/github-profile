@@ -1,7 +1,7 @@
 require('dotenv').config();
-const { AxiosError } = require('axios');
+// const { AxiosError } = require('axios');
 const app = require('./app');
-const { init } = require('./github/github');
+// const { init } = require('./github/github');
 
 process.on('uncaughtException', (e) => {
   //   if (e instanceof AxiosError)
