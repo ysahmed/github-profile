@@ -9,6 +9,7 @@ const github = axios.create({
   },
 });
 
+module.exports.github = github;
 // const user = {};
 
 // exports.init = async () => {
@@ -36,22 +37,16 @@ exports.totalRepos = async () => {
   return (await response).data.length;
 };
 
-async function getCommitCount(url) {
-  try {
-    const response = await github.get(url);
-    return response.data.length;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 exports.totalCommits = async () => {
-  const repos = (await github.get('/user/repos')).data;
-  const commitCounts = await Promise.all(
-    repos.map((repo) => getCommitCount(repo.commits_url.replace('{/sha}', ''))),
-  );
+  if (isMainThread) {
+    return new Promise((resolve, reject) => {
+      const worker = new Worker(`${__dirname}/../workers/commitsCounter.js`);
 
-  return commitCounts.reduce((acc, current) => acc + current, 0);
+      worker.on('message', (commitsCount) => resolve(commitsCount));
+
+      worker.on('error', (error) => reject(error));
+    });
+  }
 };
 
 exports.languages = async () => {
@@ -62,64 +57,6 @@ exports.languages = async () => {
   });
   return [...langs];
 };
-
-// class Achievement {
-//   constructor(achievement, imgUrl, tierText) {
-//     //! too many arguments. spread maybe
-//     const tierN = tierText.replace('x', '') * 1;
-
-//     function getTier() {
-//       switch (tierN) {
-//         case 2:
-//           return 'Bronze';
-//         case 3:
-//           return 'Silver';
-//         case 4:
-//           return 'Gold';
-//         default:
-//           return 'Default';
-//       }
-//     }
-
-//     function getColor() {
-//       switch (tierN) {
-//         case 2:
-//           return '#F9BFA7';
-//         case 3:
-//           return '#E1E4E4';
-//         case 4:
-//           return 'FAE57E';
-//         default:
-//           return null;
-//       }
-//     }
-
-//     this.achievement = achievement;
-//     this.img_url = imgUrl;
-//     this.tier_text = tierText;
-//     this.tier = getTier();
-//     this.color = getColor();
-//   }
-// }
-
-// exports.achievements = async () => {
-//   const username = (await github.get('/user')).data.login;
-//   const res = await github.get(`https://github.com/${username}?tab=achievements`);
-
-//   const html = res.data;
-//   const achievements = [];
-//   const $ = cheerio.load(html);
-//   $('details.js-achievement-card-details').each((i, el) => {
-//     achievements.push(
-//       new Achievement(
-//         $(el).find('img').attr('alt').split(':')[1].trim(),
-//         $(el).find('img').attr('src'),
-//         $(el).find('span').text(),
-//       ),
-//     );
-//   });
-//   return achievements;
-// };
 
 exports.achievements = async () => {
   const username = (await github.get('/user')).data.login;

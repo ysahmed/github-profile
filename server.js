@@ -10,6 +10,7 @@ process.on('uncaughtException', (e) => {
   //     }, 5000);
   //   else
   console.log('Uncaught Exception', e.message);
+  // ! probably exit
 });
 
 process.on('unhandledRejection', (ex) => {
