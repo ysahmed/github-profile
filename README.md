@@ -13,7 +13,7 @@ Response:
 ```json
 {
   "message": "ok",
-  "info": {
+  "data": {
     "name": "S. M. Waesh Ahmed",
     "username": "ysahmed",
     "avatar_url": "https://avatars.githubusercontent.com/u/31134625?v=4",
@@ -31,7 +31,7 @@ Response:
 ```json
 {
   "message": "ok",
-  "repos": 15
+  "data": 15
 }
 ```
 
@@ -44,7 +44,7 @@ Response:
 ```json
 {
   "message": "ok",
-  "commits": 117
+  "data": 117
 }
 ```
 
@@ -57,7 +57,7 @@ Response:
 ```json
 {
   "message": "ok",
-  "languages": ["Kotlin", "JavaScript", "C"]
+  "data": ["Kotlin", "JavaScript", "C"]
 }
 ```
 
@@ -70,7 +70,7 @@ Response:
 ```json
 {
   "message": "ok",
-  "achievements": [
+  "data": [
     {
       "achievement": "Starstruck",
       "img_url": "https://github.githubassets.com/images/modules/profile/achievements/starstruck-default--light-medium.png",
